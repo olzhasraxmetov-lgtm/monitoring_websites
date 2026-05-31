@@ -1,0 +1,37 @@
+services:
+  postgres_db:
+    image: postgres:15
+    container_name: monitoring_postgres
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: monitoring_website123
+      POSTGRES_DB: monitoring_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+
+  redis:
+    image: redis:7.4-alpine
+    container_name: monitoring_redis
+    ports:
+      - "6379:6379"
+
+  app:
+    build: .
+    volumes:
+      - .:/code
+    working_dir: /code
+    ports:
+      - "8000:8000"
+    container_name: monitoring_app
+    command: >
+      sh -c "uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
+    depends_on:
+      - postgres_db
+      - redis
+
+
+volumes:
+  postgres_data:
