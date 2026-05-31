@@ -1,0 +1,26 @@
+from app.exceptions.base import ObjectNotFoundException
+from app.utils.db_manager import DBManager
+from app.exceptions.base import BaseAppHTTPException
+from loguru import logger
+
+class BaseService:
+    db: DBManager
+
+    def __init__(self, db: DBManager) -> None:
+        self.db = db
+
+
+    async def check_if_entity_exists(self, repo, entity_id: int, error_exception: type[BaseAppHTTPException]):
+        """
+            Универсальный метод проверки существования сущности.
+            :param repo: Репозиторий (например, self.db.airports)
+            :param entity_id: ID сущности
+            :param error_exception: Класс исключения, которое нужно выбросить
+        """
+        try:
+            entity = await repo.get_one(id=entity_id)
+        except ObjectNotFoundException as ex:
+            entity_name = error_exception.__name__.replace("NotFoundException", "")
+            logger.warning(f"{entity_name} not found", entity_id=entity_id)
+            raise error_exception from ex
+        return entity
