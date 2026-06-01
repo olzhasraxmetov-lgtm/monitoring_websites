@@ -1,3 +1,5 @@
+from app.repositories.pages import PagesRepository
+
 class DBManager:
 
     def __init__(self, session_factory):
@@ -5,6 +7,8 @@ class DBManager:
 
     async def __aenter__(self):
         self.session = self.session_factory()
+
+        self.pages = PagesRepository(self.session)
 
         return self
 
