@@ -22,3 +22,8 @@ class ObjectAlreadyExistException(BaseAppHTTPException):
 class ObjectNotFoundException(BaseAppHTTPException):
     detail = "Объект не найден"
     status_code = 404
+
+class PageAlreadyExistsException(BaseAppHTTPException):
+    status_code = 409
+    detail = "Этот URL уже добавлен в систему мониторинга"
+    log_level = "INFO"
