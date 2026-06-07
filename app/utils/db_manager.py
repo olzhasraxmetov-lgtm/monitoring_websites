@@ -1,4 +1,5 @@
 from app.repositories.pages import PagesRepository
+from app.repositories.page_logs import PageLogsRepository
 
 class DBManager:
 
@@ -9,6 +10,7 @@ class DBManager:
         self.session = self.session_factory()
 
         self.pages = PagesRepository(self.session)
+        self.page_logs = PageLogsRepository(self.session)
 
         return self
 
