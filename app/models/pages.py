@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy.orm import mapped_column, Mapped
+from sqlalchemy.orm import mapped_column, Mapped, relationship
 from app.core.database import Base
 from sqlalchemy import String, DateTime, func
 
@@ -11,3 +11,9 @@ class PagesORM(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     url: Mapped[str] = mapped_column(String(255), nullable=False, unique=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
+
+    logs: Mapped[list["PageLogsORM"]] = relationship(
+        "PageLogsORM",
+        cascade="all, delete-orphan",
+        back_populates="page",
+    )

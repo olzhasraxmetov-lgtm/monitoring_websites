@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy.orm import mapped_column, Mapped
+from sqlalchemy.orm import mapped_column, Mapped, relationship
 from app.core.database import Base
 from sqlalchemy import DateTime, func, ForeignKey, Integer, Float
 
@@ -13,3 +13,8 @@ class PageLogsORM(Base):
     status_code: Mapped[int | None] = mapped_column(Integer, nullable=True)
     response_time: Mapped[float | None] = mapped_column(Float, nullable=True)
     checked_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
+
+    page: Mapped["PagesORM"] = relationship(
+        "PagesORM",
+        back_populates="logs",
+    )
