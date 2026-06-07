@@ -1,5 +1,6 @@
 from loguru import logger
-from app.exceptions.base import ObjectAlreadyExistException, PageAlreadyExistsException
+from app.exceptions.base import ObjectAlreadyExistException, PageAlreadyExistsException, ObjectNotFoundException, \
+    PageNotFoundException
 from app.schemas.pages import PageCreate
 from app.services.base import BaseService
 
@@ -13,3 +14,10 @@ class PagesService(BaseService):
         except ObjectAlreadyExistException:
             raise PageAlreadyExistsException
         return page
+
+    async def get_page_info(self, page_id: int):
+        try:
+            log = await self.db.pages.get_page_log(page_id)
+            return log
+        except ObjectNotFoundException:
+            raise PageNotFoundException
