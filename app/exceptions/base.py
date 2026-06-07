@@ -27,3 +27,6 @@ class PageAlreadyExistsException(BaseAppHTTPException):
     status_code = 409
     detail = "Этот URL уже добавлен в систему мониторинга"
     log_level = "INFO"
+
+class PageNotFoundException(ObjectNotFoundException):
+    detail = "Сайт не найден"
